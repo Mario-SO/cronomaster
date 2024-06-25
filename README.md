@@ -58,13 +58,6 @@ npm run dev
 
 We ❤️ contributions! Feel free to open a pull request, submit an issue, or star our repo. Let's make this tool better together!
 
-## 📧 Contact
-
-Have questions? Feel free to reach out:
-
--  Twitter: [@yourhandle](https://twitter.com/yourhandle)
--  Email: [you@example.com](mailto:you@example.com)
-
 ---
 
 Let's make Toastmasters sessions more engaging and time-efficient! 🌟
