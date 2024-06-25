@@ -1,113 +1,127 @@
-import Image from "next/image";
+'use client'
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { JSX, SVGProps } from "react";
 
-export default function Home() {
+export default function Component() {
+  const [timers, setTimers] = useState([
+    { id: 1, name: "Toastmaster", time: 0, active: false, minTime: 180, medTime: 240, maxTime: 300 },
+    { id: 2, name: "Muletillas", time: 0, active: false, minTime: 60, medTime: 90, maxTime: 120 },
+    { id: 3, name: "Cronometrador", time: 0, active: false, minTime: 60, medTime: 90, maxTime: 120 },
+
+    { id: 4, name: "Charla 1", time: 0, active: false, minTime: 300, medTime: 360, maxTime: 420 },
+    { id: 5, name: "Charla 2", time: 0, active: false, minTime: 300, medTime: 360, maxTime: 420 },
+    { id: 6, name: "Charla 3", time: 0, active: false, minTime: 300, medTime: 360, maxTime: 420 },
+
+    { id: 7, name: "Presentador improvisadas", time: 0, active: false, minTime: 60, medTime: 90, maxTime: 120 },
+    { id: 8, name: "Improvisada 1", time: 0, active: false, minTime: 120, medTime: 150, maxTime: 180 },
+    { id: 9, name: "Improvisada 2", time: 0, active: false, minTime: 120, medTime: 150, maxTime: 180 },
+    { id: 10, name: "Improvisada 3", time: 0, active: false, minTime: 120, medTime: 150, maxTime: 180 },
+
+    { id: 11, name: "Evaluador 1", time: 0, active: false, minTime: 60, medTime: 90, maxTime: 120 },
+    { id: 12, name: "Evaluador 2", time: 0, active: false, minTime: 60, medTime: 90, maxTime: 120 },
+    { id: 13, name: "Evaluador 3", time: 0, active: false, minTime: 60, medTime: 90, maxTime: 120 },
+    { id: 14, name: "Evaluador General", time: 0, active: false, minTime: 120, medTime: 180, maxTime: 240 },
+
+  ]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimers((prevTimers) =>
+        prevTimers.map((timer) =>
+          timer.active ? { ...timer, time: timer.time + 1 } : timer
+        )
+      );
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handlePlay = (id: number) => {
+    setTimers((prevTimers) =>
+      prevTimers.map((timer) =>
+        timer.id === id
+          ? { ...timer, active: true }
+          : { ...timer, active: false }
+      )
+    );
+  };
+
+  const handlePause = (id: number) => {
+    setTimers((prevTimers) =>
+      prevTimers.map((timer) =>
+        timer.id === id ? { ...timer, active: false } : timer
+      )
+    );
+  };
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const sec = seconds % 60;
+    return `${minutes.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}`;
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+    <div className="w-full max-w-3xl mx-auto p-6 sm:p-8 md:p-10">
+      <div className="grid gap-6">
+        {timers.map(({ id, name, time, active, minTime, medTime, maxTime }) => (
+          <div key={id} className="grid grid-cols-[1fr_auto] items-center gap-4">
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" size="icon" onClick={() => active ? handlePause(id) : handlePlay(id)}>
+                {active ? <PauseIcon className="h-5 w-5" /> : <PlayIcon className="h-5 w-5" />}
+              </Button>
+              <div>
+                <h3 className="text-lg font-medium">{name}</h3>
+                <p className="text-muted-foreground text-sm">{formatTime(time)}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className={`rounded-full bg-green-500 ${time >= minTime ? 'w-6 h-6 animate-pulse' : 'w-3 h-3'}`} />
+              <div className={`rounded-full bg-yellow-500 ${time >= medTime ? 'w-6 h-6 animate-pulse' : 'w-3 h-3'}`} />
+              <div className={`rounded-full bg-red-500 ${time >= maxTime ? 'w-6 h-6 animate-pulse' : 'w-3 h-3'}`} />
+            </div>
+          </div>
+        ))}
       </div>
+    </div>
+  );
+}
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+function PauseIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="14" y="4" width="4" height="16" rx="1" />
+      <rect x="6" y="4" width="4" height="16" rx="1" />
+    </svg>
+  );
+}
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+function PlayIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polygon points="6 3 20 12 6 21 6 3" />
+    </svg>
   );
 }
