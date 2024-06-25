@@ -73,9 +73,9 @@ export default function Component() {
                   <p className="text-muted-foreground text-sm">{formatTime(time)}</p>
 
                   <div className="flex flex-wrap lg:flex-nowrap gap-2 mt-2">
-                    <Badge className="cursor-pointer rounded-sm bg-green-500" variant="secondary">Min: {formatTime(minTime)}</Badge>
-                    <Badge className="cursor-pointer rounded-sm bg-yellow-500" variant="secondary">Med: {formatTime(medTime)}</Badge>
-                    <Badge className="cursor-pointer rounded-sm bg-red-500" variant="secondary">Max: {formatTime(maxTime)}</Badge>
+                    <Badge className="cursor-pointer hover:bg-green-400 rounded-sm bg-green-500" variant="secondary">Min: {formatTime(minTime)}</Badge>
+                    <Badge className="cursor-pointer hover:bg-yellow-400 rounded-sm bg-yellow-500" variant="secondary">Med: {formatTime(medTime)}</Badge>
+                    <Badge className="cursor-pointer hover:bg-red-400 rounded-sm bg-red-500" variant="secondary">Max: {formatTime(maxTime)}</Badge>
                   </div>
                 </div>
               </div>
