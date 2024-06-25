@@ -60,4 +60,4 @@ We ❤️ contributions! Feel free to open a pull request, submit an issue, or s
 
 ---
 
-Let's make Toastmasters sessions more engaging and time-efficient! 🌟
+Let's make Toastmaster sessions more engaging and time-efficient! 🌟
